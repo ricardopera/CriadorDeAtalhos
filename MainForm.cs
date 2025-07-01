@@ -38,9 +38,9 @@ namespace ShortcutCreator
 
             // Configuração do formulário
             this.Text = "Criador de Atalhos";
-            this.Size = new Size(550, 450);
+            this.Size = new Size(550, 420);
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.MinimumSize = new Size(550, 450);
+            this.MinimumSize = new Size(550, 420);
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
@@ -133,22 +133,24 @@ namespace ShortcutCreator
             btnCreateShortcut.Enabled = false;
             this.Controls.Add(btnCreateShortcut);
 
-            // Link para o GitHub
-            linkGitHub = new LinkLabel();
-            linkGitHub.Text = "🔗 Ver no GitHub";
-            linkGitHub.Location = new Point(430, 270);
-            linkGitHub.Size = new Size(100, 20);
-            linkGitHub.LinkClicked += LinkGitHub_LinkClicked;
-            this.Controls.Add(linkGitHub);
-
-            // Label para o nome do desenvolvedor
+            // Label para o nome do desenvolvedor (movido para o fundo, centralizado)
             lblDeveloper = new Label();
             lblDeveloper.Text = "Ricardo Pereira";
-            lblDeveloper.Location = new Point(20, 270);
+            lblDeveloper.Location = new Point(160, 370);
             lblDeveloper.Size = new Size(120, 20);
             lblDeveloper.ForeColor = Color.DarkBlue;
             lblDeveloper.Font = new Font(lblDeveloper.Font, FontStyle.Italic);
+            lblDeveloper.TextAlign = ContentAlignment.MiddleCenter;
             this.Controls.Add(lblDeveloper);
+
+            // Link para o GitHub (movido para o fundo, centralizado)
+            linkGitHub = new LinkLabel();
+            linkGitHub.Text = "🔗 Ver no GitHub";
+            linkGitHub.Location = new Point(290, 370);
+            linkGitHub.Size = new Size(100, 20);
+            linkGitHub.LinkClicked += LinkGitHub_LinkClicked;
+            linkGitHub.TextAlign = ContentAlignment.MiddleCenter;
+            this.Controls.Add(linkGitHub);
 
             // Label para status
             lblStatus = new Label();
