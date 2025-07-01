@@ -9,12 +9,12 @@
 3. Clique em "Run workflow"
 4. Preencha:
    - **Create a new release**: true
-   - **Version tag**: v1.0.2 (ou a próxima versão)
+   - **Version tag**: v1.0.3 (ou a próxima versão)
 5. Clique em "Run workflow"
 
 O workflow irá:
 - Compilar o código
-- Criar executável autocontido para Windows x64
+- Criar executável autocontido de arquivo único para Windows x64
 - Criar arquivo ZIP com o executável
 - Criar uma nova release no GitHub automaticamente
 
@@ -27,8 +27,8 @@ O workflow irá:
 2. Após o build bem-sucedido:
    - Vá para GitHub > Releases
    - Clique em "Create a new release"
-   - Tag version: `v1.0.2`
-   - Release title: `Release v1.0.2`
+   - Tag version: `v1.0.3`
+   - Release title: `Release v1.0.3`
    - Anexe o arquivo ZIP gerado
    - Publique a release
 
@@ -41,23 +41,29 @@ dotnet restore
 # Compilar
 dotnet build --configuration Release
 
-# Criar executável autocontido
-dotnet publish --configuration Release --self-contained true --runtime win-x64 --output ./publish/win-x64
+# Criar executável autocontido de arquivo único
+dotnet publish --configuration Release --self-contained true --runtime win-x64 --property:PublishSingleFile=true --output ./publish/win-x64
 
 # Criar ZIP (PowerShell)
-Compress-Archive -Path "./publish/win-x64/*" -DestinationPath "./CriadorDeAtalhos-v1.0.2-win-x64.zip"
+Compress-Archive -Path "./publish/win-x64/*" -DestinationPath "./CriadorDeAtalhos-v1.0.3-win-x64.zip"
 ```
 
-## Estrutura do Executável Autocontido
+## Estrutura do Executável de Arquivo Único
 
-O executável autocontido inclui:
-- `CriadorDeAtalhos.exe` - Executável principal
-- Todas as DLLs necessárias do .NET Runtime
+O executável autocontido de arquivo único inclui:
+- `CriadorDeAtalhos.exe` - Executável principal com todas as dependências incorporadas
 - `version.txt` - Informações de versão e build
+
+**Nota**: Agora é um único arquivo .exe que inclui todo o .NET Runtime necessário.
 
 ## Histórico de Versões
 
-### v1.0.2 (Em desenvolvimento)
+### v1.0.3 (Em desenvolvimento)
+- Implementado executável de arquivo único independente
+- Atualizado processo de build para gerar arquivo .exe standalone
+- Removida dependência de arquivos DLL externos
+
+### v1.0.2
 - Adicionado processo automatizado de build e release
 - Criados scripts de build para desenvolvimento local
 - Melhorado documentação de release
@@ -79,13 +85,19 @@ O executável autocontido inclui:
 
 ## Tamanho Aproximado do Executável
 
-- Executável autocontido: ~60-80 MB
-- Arquivo ZIP: ~25-35 MB (compactado)
+- Executável de arquivo único: ~70-90 MB
+- Arquivo ZIP: ~30-40 MB (compactado)
+
+**Nota**: O arquivo único é ligeiramente maior que a versão multi-arquivo devido à incorporação de todas as dependências.
 
 ## Verificação de Integridade
 
 Após o download, verifique:
 1. O arquivo ZIP não está corrompido
 2. O executável inicia corretamente
+3. A versão mostrada corresponde à esperada
+4. Todas as funcionalidades estão operacionais
+
+**Para testes detalhados do executável standalone, consulte**: `TESTING_STANDALONE.md`
 3. A versão mostrada corresponde à esperada
 4. Todas as funcionalidades estão operacionais
