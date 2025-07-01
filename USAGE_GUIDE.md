@@ -57,6 +57,7 @@ Foi criada toda a infraestrutura necessária para automatizar a criação de exe
 Toda a documentação está em:
 - `RELEASE_NOTES.md` - Processo detalhado
 - `README.md` - Instruções atualizadas
+- `TESTING_STANDALONE.md` - Guia para testar executável standalone
 - `.github/workflows/build-and-release.yml` - Automação
 
 **Status**: ✅ **Pronto para criar a release v1.0.3 com executável de arquivo único!**

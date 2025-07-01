@@ -97,3 +97,7 @@ Após o download, verifique:
 2. O executável inicia corretamente
 3. A versão mostrada corresponde à esperada
 4. Todas as funcionalidades estão operacionais
+
+**Para testes detalhados do executável standalone, consulte**: `TESTING_STANDALONE.md`
+3. A versão mostrada corresponde à esperada
+4. Todas as funcionalidades estão operacionais
