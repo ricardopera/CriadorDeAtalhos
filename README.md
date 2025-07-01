@@ -55,17 +55,17 @@ Para compilar a aplicação manualmente:
 dotnet build --configuration Release
 ```
 
-Para criar um executável auto-contido:
+Para criar um executável auto-contido de arquivo único:
 
 ```bash
-dotnet publish --configuration Release --self-contained true --runtime win-x64 --output ./publish
+dotnet publish --configuration Release --self-contained true --runtime win-x64 --property:PublishSingleFile=true --output ./publish
 ```
 
 ### Automatização com GitHub Actions
 
 O projeto inclui um workflow do GitHub Actions que automaticamente:
 - Compila o código quando uma tag é criada
-- Cria executável autocontido
+- Cria executável autocontido de arquivo único
 - Gera release com arquivo ZIP
 - Publica automaticamente no GitHub Releases
 

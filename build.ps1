@@ -48,16 +48,16 @@ try {
 
 Write-Host ""
 
-# Criar executável autocontido
-Write-Host "Criando executável autocontido..." -ForegroundColor Yellow
+# Criar executável autocontido de arquivo único
+Write-Host "Criando executável autocontido de arquivo único..." -ForegroundColor Yellow
 try {
     if (Test-Path "./publish") {
         Remove-Item "./publish" -Recurse -Force
     }
     
-    dotnet publish --configuration Release --self-contained true --runtime win-x64 --output ./publish/win-x64
-    if ($LASTEXITCODE -ne 0) { throw "Falha ao criar executável autocontido" }
-    Write-Host "Executável autocontido criado com sucesso!" -ForegroundColor Green
+    dotnet publish --configuration Release --self-contained true --runtime win-x64 --property:PublishSingleFile=true --output ./publish/win-x64
+    if ($LASTEXITCODE -ne 0) { throw "Falha ao criar executável autocontido de arquivo único" }
+    Write-Host "Executável autocontido de arquivo único criado com sucesso!" -ForegroundColor Green
 } catch {
     Write-Host "ERRO: $($_.Exception.Message)" -ForegroundColor Red
     Read-Host "Pressione Enter para sair"
@@ -70,7 +70,7 @@ Write-Host ""
 Write-Host "Criando informações de versão..." -ForegroundColor Yellow
 try {
     $versionInfo = @"
-Version: 1.0.2
+Version: 1.0.3
 Build Date: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
 Commit: $(git rev-parse HEAD 2>$null)
 "@
@@ -85,7 +85,7 @@ Write-Host ""
 # Criar arquivo ZIP
 Write-Host "Criando arquivo ZIP..." -ForegroundColor Yellow
 try {
-    $zipPath = "./CriadorDeAtalhos-v1.0.2-win-x64.zip"
+    $zipPath = "./CriadorDeAtalhos-v1.0.3-win-x64.zip"
     if (Test-Path $zipPath) {
         Remove-Item $zipPath -Force
     }
@@ -102,7 +102,7 @@ Write-Host "BUILD CONCLUÍDO COM SUCESSO!" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""
 Write-Host "Executável criado em: ./publish/win-x64/CriadorDeAtalhos.exe" -ForegroundColor Cyan
-Write-Host "Arquivo ZIP: ./CriadorDeAtalhos-v1.0.2-win-x64.zip" -ForegroundColor Cyan
+Write-Host "Arquivo ZIP: ./CriadorDeAtalhos-v1.0.3-win-x64.zip" -ForegroundColor Cyan
 Write-Host ""
 
 $answer = Read-Host "Deseja abrir a pasta do executável? (s/n)"

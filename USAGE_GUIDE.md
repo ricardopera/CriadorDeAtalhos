@@ -2,14 +2,14 @@
 
 ## ✅ Situação Atual
 
-Foi criada toda a infraestrutura necessária para automatizar a criação de executáveis autocontidos e releases:
+Foi criada toda a infraestrutura necessária para automatizar a criação de executáveis autocontidos de arquivo único e releases:
 
-- **Versão atualizada**: 1.0.2.0 no arquivo `ShortcutCreator.csproj`
+- **Versão atualizada**: 1.0.3.0 no arquivo `ShortcutCreator.csproj`
 - **GitHub Actions**: Workflow completo para build automatizado
 - **Scripts locais**: `build.bat` e `build.ps1` para builds manuais
 - **Documentação**: `RELEASE_NOTES.md` com instruções detalhadas
 
-## 🎯 Como Criar a Nova Release v1.0.2
+## 🎯 Como Criar a Nova Release v1.0.3
 
 ### Opção 1: Automática (Recomendada)
 1. No GitHub, vá em **Actions**
@@ -17,12 +17,12 @@ Foi criada toda a infraestrutura necessária para automatizar a criação de exe
 3. Clique em **"Run workflow"**
 4. Configure:
    - ✅ Create a new release: **true**
-   - 🏷️ Version tag: **v1.0.2**
+   - 🏷️ Version tag: **v1.0.3**
 5. Clique em **"Run workflow"**
 
 **O que acontece:**
 - ✅ Compila o código automaticamente no Windows
-- 📦 Cria executável autocontido (win-x64)
+- 📦 Cria executável autocontido de arquivo único (win-x64)
 - 🗜️ Gera arquivo ZIP
 - 🚀 Publica release com descrição completa
 - 📋 Inclui informações de build
@@ -34,16 +34,16 @@ Foi criada toda a infraestrutura necessária para automatizar a criação de exe
 
 ## 📁 O que será criado
 
-**Executável autocontido incluirá:**
-- `CriadorDeAtalhos.exe` - Aplicação principal
-- Todas as DLLs do .NET Runtime
+**Executável de arquivo único incluirá:**
+- `CriadorDeAtalhos.exe` - Aplicação principal com todas as dependências incorporadas
 - `version.txt` - Informações de versão
-- **Tamanho**: ~60-80 MB (ZIP ~25-35 MB)
+- **Tamanho**: ~70-90 MB (ZIP ~30-40 MB)
 
 **Requisitos do usuário final:**
 - ✅ Windows 10 ou superior
 - ✅ Arquitetura x64
 - ❌ **NÃO precisa instalar .NET Runtime**
+- ✅ **Arquivo ÚNICO - pode ser compartilhado independentemente**
 
 ## 🔄 Para próximas releases
 
@@ -59,4 +59,4 @@ Toda a documentação está em:
 - `README.md` - Instruções atualizadas
 - `.github/workflows/build-and-release.yml` - Automação
 
-**Status**: ✅ **Pronto para criar a release v1.0.2!**
+**Status**: ✅ **Pronto para criar a release v1.0.3 com executável de arquivo único!**

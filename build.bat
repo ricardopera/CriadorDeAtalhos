@@ -34,28 +34,28 @@ if errorlevel 1 (
 )
 
 echo.
-echo Criando executável autocontido...
+echo Criando executável autocontido de arquivo único...
 if exist "./publish" rmdir /s /q "./publish"
-dotnet publish --configuration Release --self-contained true --runtime win-x64 --output ./publish/win-x64
+dotnet publish --configuration Release --self-contained true --runtime win-x64 --property:PublishSingleFile=true --output ./publish/win-x64
 if errorlevel 1 (
-    echo ERRO: Falha ao criar executável autocontido!
+    echo ERRO: Falha ao criar executável autocontido de arquivo único!
     pause
     exit /b 1
 )
 
 echo.
 echo Criando informações de versão...
-echo Version: 1.0.2 > "./publish/win-x64/version.txt"
+echo Version: 1.0.3 > "./publish/win-x64/version.txt"
 echo Build Date: %date% %time% >> "./publish/win-x64/version.txt"
 for /f "tokens=*" %%i in ('git rev-parse HEAD 2^>nul') do echo Commit: %%i >> "./publish/win-x64/version.txt"
 
 echo.
 echo Criando arquivo ZIP...
-powershell -Command "Compress-Archive -Path './publish/win-x64/*' -DestinationPath './CriadorDeAtalhos-v1.0.2-win-x64.zip' -Force"
+powershell -Command "Compress-Archive -Path './publish/win-x64/*' -DestinationPath './CriadorDeAtalhos-v1.0.3-win-x64.zip' -Force"
 if errorlevel 1 (
     echo AVISO: Falha ao criar arquivo ZIP. Executável criado em ./publish/win-x64/
 ) else (
-    echo Arquivo ZIP criado: CriadorDeAtalhos-v1.0.2-win-x64.zip
+    echo Arquivo ZIP criado: CriadorDeAtalhos-v1.0.3-win-x64.zip
 )
 
 echo.
@@ -64,7 +64,7 @@ echo BUILD CONCLUÍDO COM SUCESSO!
 echo ========================================
 echo.
 echo Executável criado em: ./publish/win-x64/CriadorDeAtalhos.exe
-echo Arquivo ZIP: ./CriadorDeAtalhos-v1.0.2-win-x64.zip
+echo Arquivo ZIP: ./CriadorDeAtalhos-v1.0.3-win-x64.zip
 echo.
 
 set /p answer="Deseja abrir a pasta do executável? (s/n): "
