@@ -13,4 +13,8 @@
     <FileVersion>1.0.2.0</FileVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="favicon.ico" />
+  </ItemGroup>
+
 </Project>
