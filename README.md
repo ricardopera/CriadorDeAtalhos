@@ -33,7 +33,23 @@ Uma aplicação Windows simples para criar atalhos de arquivos e diretórios.
 
 ## 🔧 Compilação
 
-Para compilar a aplicação:
+### Build Rápido (Recomendado)
+
+Para compilar e criar o executável autocontido rapidamente, use os scripts fornecidos:
+
+**Windows Command Prompt:**
+```cmd
+build.bat
+```
+
+**Windows PowerShell:**
+```powershell
+.\build.ps1
+```
+
+### Build Manual
+
+Para compilar a aplicação manualmente:
 
 ```bash
 dotnet build --configuration Release
@@ -44,6 +60,16 @@ Para criar um executável auto-contido:
 ```bash
 dotnet publish --configuration Release --self-contained true --runtime win-x64 --output ./publish
 ```
+
+### Automatização com GitHub Actions
+
+O projeto inclui um workflow do GitHub Actions que automaticamente:
+- Compila o código quando uma tag é criada
+- Cria executável autocontido
+- Gera release com arquivo ZIP
+- Publica automaticamente no GitHub Releases
+
+Para mais detalhes, veja [RELEASE_NOTES.md](RELEASE_NOTES.md).
 
 ## 📋 Estrutura do Projeto
 
