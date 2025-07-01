@@ -24,6 +24,7 @@ namespace ShortcutCreator
         private Button btnBrowseDestination;
         private Label lblStatus;
         private LinkLabel linkGitHub;
+        private Label lblDeveloper;
 
         public MainForm()
         {
@@ -139,6 +140,15 @@ namespace ShortcutCreator
             linkGitHub.Size = new Size(100, 20);
             linkGitHub.LinkClicked += LinkGitHub_LinkClicked;
             this.Controls.Add(linkGitHub);
+
+            // Label para o nome do desenvolvedor
+            lblDeveloper = new Label();
+            lblDeveloper.Text = "Ricardo Pereira";
+            lblDeveloper.Location = new Point(20, 270);
+            lblDeveloper.Size = new Size(120, 20);
+            lblDeveloper.ForeColor = Color.DarkBlue;
+            lblDeveloper.Font = new Font(lblDeveloper.Font, FontStyle.Italic);
+            this.Controls.Add(lblDeveloper);
 
             // Label para status
             lblStatus = new Label();
