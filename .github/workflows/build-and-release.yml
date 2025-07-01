@@ -1,0 +1,114 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create a new release'
+        required: true
+        default: 'true'
+        type: boolean
+      version_tag:
+        description: 'Version tag (e.g., v1.0.2)'
+        required: true
+        default: 'v1.0.2'
+        type: string
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '6.0.x'
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      
+    - name: Publish self-contained executable
+      run: dotnet publish --configuration Release --self-contained true --runtime win-x64 --output ./publish/win-x64
+      
+    - name: Create version info
+      run: |
+        $version = "${{ github.event.inputs.version_tag || github.ref_name }}"
+        echo "Version: $version" > ./publish/win-x64/version.txt
+        echo "Build Date: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" >> ./publish/win-x64/version.txt
+        echo "Commit: ${{ github.sha }}" >> ./publish/win-x64/version.txt
+      shell: pwsh
+      
+    - name: Create ZIP archive
+      run: |
+        $version = "${{ github.event.inputs.version_tag || github.ref_name }}"
+        Compress-Archive -Path "./publish/win-x64/*" -DestinationPath "./CriadorDeAtalhos-$version-win-x64.zip"
+      shell: pwsh
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: CriadorDeAtalhos-build
+        path: |
+          ./publish/win-x64/
+          ./CriadorDeAtalhos-*.zip
+          
+  release:
+    needs: build
+    runs-on: windows-latest
+    if: github.event.inputs.create_release == 'true' || startsWith(github.ref, 'refs/tags/')
+    
+    permissions:
+      contents: write
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: CriadorDeAtalhos-build
+        
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ github.event.inputs.version_tag || github.ref_name }}
+        name: Release ${{ github.event.inputs.version_tag || github.ref_name }}
+        body: |
+          ## Criador de Atalhos - Release ${{ github.event.inputs.version_tag || github.ref_name }}
+          
+          ### 📦 Executável Autocontido
+          Este release inclui um executável autocontido para Windows x64 que não requer instalação do .NET Runtime.
+          
+          ### 📋 Como usar
+          1. Baixe o arquivo `CriadorDeAtalhos-${{ github.event.inputs.version_tag || github.ref_name }}-win-x64.zip`
+          2. Extraia o conteúdo para uma pasta de sua escolha
+          3. Execute `CriadorDeAtalhos.exe`
+          
+          ### 🎯 Funcionalidades
+          - Interface gráfica intuitiva para criar atalhos
+          - Suporte a arquivos e diretórios
+          - Detecção automática da área de transferência
+          - Criação de atalhos na área de trabalho ou local personalizado
+          - Prevenção automática de conflitos de nomes
+          
+          ### 💻 Requisitos do Sistema
+          - Windows 10 ou superior
+          - Arquitetura x64
+          
+          ### 🔧 Build Info
+          - Build Date: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
+          - Commit: ${{ github.sha }}
+        files: |
+          CriadorDeAtalhos-*.zip
+        draft: false
+        prerelease: false

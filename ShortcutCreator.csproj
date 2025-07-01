@@ -9,8 +9,8 @@
     <ApplicationIcon>favicon.ico</ApplicationIcon>
     <AssemblyTitle>Criador de Atalhos</AssemblyTitle>
     <AssemblyDescription>Aplicação para criar atalhos de arquivos e diretórios no Windows</AssemblyDescription>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.2.0</FileVersion>
   </PropertyGroup>
 
 </Project>
