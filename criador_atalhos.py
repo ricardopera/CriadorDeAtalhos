@@ -21,6 +21,7 @@ from pathlib import Path
 try:
     import win32com.client
     import pythoncom
+    from win32com.shell import shell, shellcon
     WIN32_AVAILABLE = True
 except ImportError:
     WIN32_AVAILABLE = False
@@ -221,14 +222,28 @@ class CriadorAtalhos:
         self.status_var.set(message)
         self.status_label.config(foreground=color)
         
+    def _get_desktop_path(self):
+        """Obtém o caminho correto da Área de Trabalho usando a API do Windows"""
+        if not WIN32_AVAILABLE:
+            # Fallback para o método antigo se pywin32 não estiver disponível
+            return os.path.join(os.path.expanduser("~"), "Desktop")
+        
+        try:
+            # Usar a API do Windows para obter o caminho correto da Área de Trabalho
+            # Equivalente ao Environment.GetFolderPath(Environment.SpecialFolder.Desktop) do C#
+            desktop_path = shell.SHGetFolderPath(0, shellcon.CSIDL_DESKTOP, None, 0)
+            return desktop_path
+        except Exception:
+            # Fallback se houver erro com a API
+            return os.path.join(os.path.expanduser("~"), "Desktop")
+        
     def create_shortcut(self):
         """Cria o atalho"""
         try:
             source_path = self.path_var.get().strip()
             
             if self.destination_var.get() == "desktop":
-                desktop = os.path.join(os.path.expanduser("~"), "Desktop")
-                destination_folder = desktop
+                destination_folder = self._get_desktop_path()
             else:
                 destination_folder = self.custom_path_var.get().strip()
                 
