@@ -246,20 +246,27 @@ class CriadorAtalhos:
                 destination_folder = self._get_desktop_path()
             else:
                 destination_folder = self.custom_path_var.get().strip()
+            
+            # Normalizar caminhos para garantir formato Windows consistente
+            source_path = self._normalize_windows_path(source_path)
+            destination_folder = self._normalize_windows_path(destination_folder)
                 
             # Determinar nome do arquivo
             if os.path.isfile(source_path):
                 filename = os.path.splitext(os.path.basename(source_path))[0]
             else:
-                filename = os.path.basename(source_path.rstrip(os.sep))
+                filename = os.path.basename(source_path.rstrip('\\').rstrip('/'))
                 
             shortcut_path = os.path.join(destination_folder, f"{filename}.lnk")
+            shortcut_path = self._normalize_windows_path(shortcut_path)
             
             # Verificar se já existe e adicionar numeração
             counter = 1
             original_shortcut_path = shortcut_path
             while os.path.exists(shortcut_path):
-                shortcut_path = os.path.join(destination_folder, f"{filename} ({counter}).lnk")
+                test_filename = f"{filename} ({counter})"
+                shortcut_path = os.path.join(destination_folder, f"{test_filename}.lnk")
+                shortcut_path = self._normalize_windows_path(shortcut_path)
                 counter += 1
                 
             # Criar o atalho usando COM
@@ -274,7 +281,7 @@ class CriadorAtalhos:
             )
             
             if result:
-                # Selecionar o arquivo no Explorer
+                # Selecionar o arquivo no Explorer - usar path normalizado
                 subprocess.run(f'explorer /select,"{shortcut_path}"', shell=True)
                 
         except Exception as e:
@@ -282,6 +289,55 @@ class CriadorAtalhos:
             self.set_status(error_msg, "red")
             messagebox.showerror("Erro", error_msg)
             
+    def _normalize_windows_path(self, path):
+        """
+        Normaliza o caminho para o formato do Windows com barras invertidas
+        """
+        if not path:
+            return path
+        
+        # Converter para formato Windows usando normpath
+        normalized = os.path.normpath(path)
+        
+        # Garantir que usamos barras invertidas do Windows
+        # Isso é importante para consistência visual nas propriedades do atalho
+        normalized = normalized.replace('/', '\\')
+        
+        return normalized
+    
+    def _get_working_directory(self, source_path):
+        """
+        Obtém o diretório de trabalho correto para o atalho
+        Para arquivos: diretório pai
+        Para pastas: diretório pai (não a própria pasta)
+        
+        Equivalente ao Path.GetDirectoryName() do C#
+        """
+        if not source_path:
+            return ""
+        
+        # Normalizar o caminho primeiro
+        source_path = self._normalize_windows_path(source_path)
+        
+        # Para ambos arquivos e pastas, queremos o diretório pai
+        # O C# Path.GetDirectoryName() retorna o pai para ambos os casos
+        
+        # Usar split manual para garantir comportamento consistente no Windows
+        if '\\' in source_path:
+            parts = source_path.rstrip('\\').split('\\')
+            if len(parts) > 1:
+                # Retornar tudo exceto o último componente
+                parent = '\\'.join(parts[:-1])
+                # Para drives raiz como "C:", adicionar barra invertida
+                if len(parent) == 2 and parent.endswith(':'):
+                    parent += '\\'
+                return parent
+            elif len(parts) == 1 and parts[0].endswith(':'):
+                # Para casos como "C:" retornar "C:\"
+                return parts[0] + '\\'
+        
+        return ""
+    
     def _create_windows_shortcut(self, source_path, shortcut_path):
         """Cria atalho usando COM (equivalente ao código C#)"""
         if not WIN32_AVAILABLE:
@@ -291,8 +347,18 @@ class CriadorAtalhos:
         try:
             shell = win32com.client.Dispatch("WScript.Shell")
             shortcut = shell.CreateShortCut(shortcut_path)
-            shortcut.Targetpath = source_path
-            shortcut.WorkingDirectory = os.path.dirname(source_path) if os.path.isfile(source_path) else source_path
+            
+            # Normalizar caminhos para formato Windows
+            normalized_source = self._normalize_windows_path(source_path)
+            normalized_shortcut = self._normalize_windows_path(shortcut_path)
+            
+            # Configurar target (sempre o caminho normalizado)
+            shortcut.Targetpath = normalized_source
+            
+            # Configurar working directory (sempre o diretório pai)
+            # Isso corrige o problema onde pastas usavam a própria pasta como working directory
+            working_dir = self._get_working_directory(normalized_source)
+            shortcut.WorkingDirectory = working_dir
             
             # Adicionar descrição
             if os.path.isfile(source_path):
