@@ -38,9 +38,9 @@ namespace ShortcutCreator
 
             // Configuração do formulário
             this.Text = "Criador de Atalhos";
-            this.Size = new Size(550, 420);
+            this.Size = new Size(550, 460);
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.MinimumSize = new Size(550, 420);
+            this.MinimumSize = new Size(550, 460);
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
@@ -133,21 +133,21 @@ namespace ShortcutCreator
             btnCreateShortcut.Enabled = false;
             this.Controls.Add(btnCreateShortcut);
 
-            // Label para o nome do desenvolvedor (movido para o fundo, centralizado)
+            // Label para o nome do desenvolvedor (centralizado na parte inferior)
             lblDeveloper = new Label();
             lblDeveloper.Text = "Ricardo Pereira";
-            lblDeveloper.Location = new Point(160, 370);
-            lblDeveloper.Size = new Size(120, 20);
+            lblDeveloper.Location = new Point(150, 400);
+            lblDeveloper.Size = new Size(130, 20);
             lblDeveloper.ForeColor = Color.DarkBlue;
             lblDeveloper.Font = new Font(lblDeveloper.Font, FontStyle.Italic);
             lblDeveloper.TextAlign = ContentAlignment.MiddleCenter;
             this.Controls.Add(lblDeveloper);
 
-            // Link para o GitHub (movido para o fundo, centralizado)
+            // Link para o GitHub (centralizado na parte inferior)
             linkGitHub = new LinkLabel();
             linkGitHub.Text = "🔗 Ver no GitHub";
-            linkGitHub.Location = new Point(290, 370);
-            linkGitHub.Size = new Size(100, 20);
+            linkGitHub.Location = new Point(290, 400);
+            linkGitHub.Size = new Size(110, 20);
             linkGitHub.LinkClicked += LinkGitHub_LinkClicked;
             linkGitHub.TextAlign = ContentAlignment.MiddleCenter;
             this.Controls.Add(linkGitHub);
