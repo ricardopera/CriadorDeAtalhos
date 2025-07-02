@@ -2,6 +2,15 @@
 
 Uma aplicação Windows simples para criar atalhos de arquivos e diretórios.
 
+## 📋 Versões Disponíveis
+
+| Versão | Tecnologia | Tamanho | Branch | Descrição |
+|--------|------------|---------|---------|-----------|
+| **C# Original** | .NET 6 WinForms | ~70-90 MB | `main` | Versão original completa |
+| **Python Reduzida** | Python + tkinter | ~10-20 MB | `python-implementation` | Versão otimizada para tamanho reduzido |
+
+> 💡 **Recomendação**: Use a versão Python para downloads mais rápidos e menor uso de espaço. Ambas possuem **funcionalidades idênticas**.
+
 ## 🎯 Funcionalidades
 
 - **Interface gráfica intuitiva**: Interface Windows Forms limpa e fácil de usar
@@ -32,6 +41,28 @@ Uma aplicação Windows simples para criar atalhos de arquivos e diretórios.
 - .NET 6.0 Runtime
 
 ## 🔧 Compilação
+
+### Versão Python (Recomendada - Executável Reduzido)
+
+Para compilar a versão otimizada em Python (~10-20 MB):
+
+**Windows Command Prompt:**
+```cmd
+git checkout python-implementation
+build-python.bat
+```
+
+**Windows PowerShell:**
+```powershell
+git checkout python-implementation
+.\build-python.ps1
+```
+
+📖 **Documentação completa**: [README-PYTHON.md](README-PYTHON.md)
+
+### Versão C# Original
+
+Para compilar a versão original em C# (~70-90 MB):
 
 ### Build Rápido (Recomendado)
 
