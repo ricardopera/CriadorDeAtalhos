@@ -16,9 +16,20 @@ import subprocess
 import tempfile
 import webbrowser
 from pathlib import Path
-import win32com.client
-import pythoncom
-import pyperclip
+
+# Verificar dependências opcionais
+try:
+    import win32com.client
+    import pythoncom
+    WIN32_AVAILABLE = True
+except ImportError:
+    WIN32_AVAILABLE = False
+    
+try:
+    import pyperclip
+    CLIPBOARD_AVAILABLE = True
+except ImportError:
+    CLIPBOARD_AVAILABLE = False
 
 
 class CriadorAtalhos:
@@ -151,6 +162,10 @@ class CriadorAtalhos:
             
     def detect_clipboard_content(self):
         """Detecta conteúdo da área de transferência"""
+        if not CLIPBOARD_AVAILABLE:
+            self.set_status("Área de transferência não disponível (pyperclip não instalado).", "orange")
+            return
+            
         try:
             clipboard_text = pyperclip.paste().strip()
             
@@ -254,6 +269,9 @@ class CriadorAtalhos:
             
     def _create_windows_shortcut(self, source_path, shortcut_path):
         """Cria atalho usando COM (equivalente ao código C#)"""
+        if not WIN32_AVAILABLE:
+            raise Exception("pywin32 não está disponível. Instale com: pip install pywin32")
+            
         pythoncom.CoInitialize()
         try:
             shell = win32com.client.Dispatch("WScript.Shell")
@@ -288,12 +306,34 @@ def main():
     if sys.platform != "win32":
         print("Esta aplicação funciona apenas no Windows.")
         sys.exit(1)
+    
+    # Verificar dependências críticas
+    missing_deps = []
+    if not WIN32_AVAILABLE:
+        missing_deps.append("pywin32")
+    if not CLIPBOARD_AVAILABLE:
+        missing_deps.append("pyperclip")
+    
+    if missing_deps:
+        error_msg = f"Dependências não encontradas: {', '.join(missing_deps)}\n"
+        error_msg += f"Instale com: pip install {' '.join(missing_deps)}"
+        print(error_msg)
+        try:
+            messagebox.showerror("Dependências Faltando", error_msg)
+        except:
+            pass
+        sys.exit(1)
         
     try:
         app = CriadorAtalhos()
         app.run()
     except Exception as e:
-        messagebox.showerror("Erro Fatal", f"Erro ao iniciar a aplicação:\n{str(e)}")
+        error_msg = f"Erro ao iniciar a aplicação:\n{str(e)}"
+        print(error_msg)
+        try:
+            messagebox.showerror("Erro Fatal", error_msg)
+        except:
+            pass
         sys.exit(1)
 
 
