@@ -64,6 +64,10 @@ try {
         Remove-Item "./publish/python-win-x64" -Recurse -Force
     }
     
+    Write-Host "Preparando arquivos para o build..." -ForegroundColor Yellow
+    New-Item -ItemType Directory -Path "build" -Force | Out-Null
+    Copy-Item "favicon.ico" "build\" -Force
+    
     & pyinstaller --onefile --windowed --name "CriadorDeAtalhos" `
         --icon="favicon.ico" `
         --add-data "favicon.ico;." `

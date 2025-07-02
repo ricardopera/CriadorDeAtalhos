@@ -40,6 +40,8 @@ jobs:
         
     - name: Build executable
       run: |
+        mkdir build
+        copy favicon.ico build\
         pyinstaller --onefile --windowed --name "CriadorDeAtalhos" --icon="favicon.ico" --add-data "favicon.ico;." --distpath "./publish/python-win-x64" --workpath "./build" --specpath "./build" criador_atalhos.py
         
     - name: Create version info
