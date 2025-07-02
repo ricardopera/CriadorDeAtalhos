@@ -42,6 +42,10 @@ echo Criando executável autocontido...
 if exist "dist" rmdir /s /q "dist"
 if exist "build" rmdir /s /q "build"
 
+echo Preparando arquivos para o build...
+mkdir build
+copy favicon.ico build\
+
 pyinstaller --onefile --windowed --name "CriadorDeAtalhos" ^
     --icon="favicon.ico" ^
     --add-data "favicon.ico;." ^
