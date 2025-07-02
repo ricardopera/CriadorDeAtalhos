@@ -3,15 +3,6 @@ bin/
 obj/
 publish/
 
-# Python build outputs
-build/
-dist/
-*.spec
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
 # Release artifacts
 *.zip
 
