@@ -1,0 +1,154 @@
+name: Build and Release - Python Implementation
+
+on:
+  push:
+    branches:
+      - python-implementation
+    tags:
+      - 'v*-py'
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create a new release'
+        required: true
+        default: 'true'
+        type: boolean
+      version_tag:
+        description: 'Version tag (e.g., v1.0.3-py)'
+        required: true
+        default: 'v1.0.3-py'
+        type: string
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        pip install -r requirements.txt
+        
+    - name: Build executable
+      run: |
+        pyinstaller --onefile --windowed --name "CriadorDeAtalhos" --icon="favicon.ico" --add-data "favicon.ico;." --distpath "./publish/python-win-x64" --workpath "./build" --specpath "./build" criador_atalhos.py
+        
+    - name: Create version info
+      run: |
+        $version = "${{ github.event.inputs.version_tag || github.ref_name }}"
+        $versionInfo = @"
+        Version: $version
+        Build Date: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
+        Commit: ${{ github.sha }}
+        Python Implementation
+        "@
+        $versionInfo | Out-File -FilePath "./publish/python-win-x64/version.txt" -Encoding UTF8
+      shell: pwsh
+      
+    - name: Check executable size
+      run: |
+        if (Test-Path "./publish/python-win-x64/CriadorDeAtalhos.exe") {
+          $fileSize = (Get-Item "./publish/python-win-x64/CriadorDeAtalhos.exe").Length
+          $fileSizeMB = [Math]::Round($fileSize / 1MB, 2)
+          Write-Host "Executable size: $fileSizeMB MB"
+          echo "EXECUTABLE_SIZE_MB=$fileSizeMB" >> $env:GITHUB_ENV
+        }
+      shell: pwsh
+      
+    - name: Create ZIP archive
+      run: |
+        $version = "${{ github.event.inputs.version_tag || github.ref_name }}"
+        Compress-Archive -Path "./publish/python-win-x64/*" -DestinationPath "./CriadorDeAtalhos-$version-win-x64.zip"
+      shell: pwsh
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: CriadorDeAtalhos-python-build
+        path: |
+          ./publish/python-win-x64/
+          ./CriadorDeAtalhos-*.zip
+          
+  release:
+    needs: build
+    runs-on: windows-latest
+    if: github.event.inputs.create_release == 'true' || startsWith(github.ref, 'refs/tags/')
+    
+    permissions:
+      contents: write
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: CriadorDeAtalhos-python-build
+        
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ github.event.inputs.version_tag || github.ref_name }}
+        name: Release ${{ github.event.inputs.version_tag || github.ref_name }} - Python Implementation
+        body: |
+          ## Criador de Atalhos - Release ${{ github.event.inputs.version_tag || github.ref_name }} (Python Implementation)
+          
+          ### 🐍 Implementação Python - Executável Reduzido
+          Esta versão utiliza Python + tkinter para criar um executável significativamente menor (~10-20 MB vs ~70-90 MB da versão C#).
+          
+          ### 📦 Executável Autocontido
+          Este release inclui um executável autocontido para Windows x64 que não requer instalação de Python ou dependências.
+          
+          ### ⚡ Vantagens desta Versão
+          - **Tamanho reduzido**: ~10-20 MB (vs ~70-90 MB da versão C#)
+          - **Inicialização mais rápida**: Menor tempo de carregamento
+          - **Mesmo funcionalidades**: Interface e recursos idênticos
+          - **Downloads mais rápidos**: Arquivo menor para distribuição
+          
+          ### 📋 Como usar
+          1. Baixe o arquivo `CriadorDeAtalhos-${{ github.event.inputs.version_tag || github.ref_name }}-win-x64.zip`
+          2. Extraia o conteúdo para uma pasta de sua escolha
+          3. Execute `CriadorDeAtalhos.exe`
+          
+          ### 🎯 Funcionalidades
+          - Interface gráfica intuitiva para criar atalhos
+          - Suporte a arquivos e diretórios
+          - Detecção automática da área de transferência
+          - Criação de atalhos na área de trabalho ou local personalizado
+          - Prevenção automática de conflitos de nomes
+          - Abertura automática da pasta após criação do atalho
+          
+          ### 💻 Requisitos do Sistema
+          - Windows 10 ou superior
+          - Arquitetura x64
+          - Sem dependências adicionais necessárias
+          
+          ### 🔧 Informações Técnicas
+          - **Linguagem**: Python 3.11
+          - **Interface**: tkinter (nativo)
+          - **Empacotamento**: PyInstaller
+          - **Tamanho aproximado**: ~${{ env.EXECUTABLE_SIZE_MB || '10-20' }} MB
+          - **Build Date**: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
+          - **Commit**: ${{ github.sha }}
+          
+          ### 🔄 Comparação com Versão C#
+          | Característica | Python | C# |
+          |---|---|---|
+          | Tamanho do executável | ~10-20 MB | ~70-90 MB |
+          | Tempo de inicialização | Rápido | Moderado |
+          | Funcionalidades | Idênticas | Idênticas |
+          | Dependências | Nenhuma | Nenhuma |
+        files: |
+          CriadorDeAtalhos-*.zip
+        draft: false
+        prerelease: false
