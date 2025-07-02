@@ -31,6 +31,9 @@ __pycache__/
 *.log
 *.tmp
 
+# Test files
+test_*.py
+
 # OS generated files
 .DS_Store
 .DS_Store?
