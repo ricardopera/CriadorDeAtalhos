@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criador de Atalhos</title>
+    <meta http-equiv="refresh" content="0; url=./web/">
+    <link rel="canonical" href="./web/" />
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            text-align: center; 
+            padding: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 600px;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .loading {
+            font-size: 1.2em;
+            margin: 1.5rem 0;
+            opacity: 0.9;
+        }
+        .link {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            display: inline-block;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .description {
+            opacity: 0.8;
+            margin: 1rem 0;
+            line-height: 1.6;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔗 Criador de Atalhos</h1>
+        <div class="description">
+            Crie atalhos do Windows diretamente no seu navegador
+        </div>
+        <div class="loading">
+            <span class="spinner"></span>
+            Redirecionando para a aplicação web...
+        </div>
+        <div>
+            <a href="./web/" class="link">🚀 Acessar Aplicação Web</a>
+            <a href="https://github.com/ricardopera/CriadorDeAtalhos" class="link">📁 Ver Código no GitHub</a>
+        </div>
+        <p style="margin-top: 2rem; opacity: 0.7; font-size: 0.9em;">
+            Se o redirecionamento não funcionar automaticamente, clique no botão acima.
+        </p>
+    </div>
+    
+    <script>
+        setTimeout(() => {
+            window.location.href = './web/';
+        }, 2000);
+    </script>
+</body>
+</html>
