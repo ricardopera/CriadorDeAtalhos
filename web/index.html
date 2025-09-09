@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criador de Atalhos - Web</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔗 Criador de Atalhos</h1>
+            <p class="subtitle">Versão Web - Execute diretamente no seu navegador</p>
+        </header>
+
+        <main>
+            <div class="form-section">
+                <label for="source-path">Caminho do arquivo ou diretório:</label>
+                <div class="input-group">
+                    <input type="text" id="source-path" placeholder="Cole ou digite o caminho completo aqui...">
+                    <button id="browse-file-btn" type="button">Selecionar Arquivo</button>
+                </div>
+                <input type="file" id="file-input" style="display: none;" webkitdirectory="false">
+                <input type="file" id="folder-input" style="display: none;" webkitdirectory="true">
+                
+                <div class="button-group">
+                    <button id="browse-folder-btn" type="button">Selecionar Pasta</button>
+                    <button id="detect-clipboard-btn" type="button">Detectar da Área de Transferência</button>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <label>Destino do atalho:</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="destination" value="desktop" checked>
+                        <span class="radio-label">Área de Trabalho</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="destination" value="downloads">
+                        <span class="radio-label">Downloads</span>
+                    </label>
+                    <label class="radio-option custom-destination">
+                        <div>
+                            <input type="radio" name="destination" value="custom">
+                            <span class="radio-label">Local personalizado:</span>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" id="custom-destination" placeholder="Caminho de destino..." disabled>
+                            <button id="browse-destination-btn" type="button" disabled>Navegar</button>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="create-section">
+                    <button id="create-shortcut-btn" type="button" disabled>Criar Atalho</button>
+                    <button id="create-script-btn" type="button" disabled>Gerar Script VBS</button>
+                </div>
+                
+                <div id="status" class="status">
+                    Selecione um arquivo ou pasta para criar o atalho.
+                </div>
+            </div>
+
+            <div class="info-section">
+                <div class="info-box">
+                    <h3>ℹ️ Como usar a versão Web</h3>
+                    <ul>
+                        <li><strong>Arquivo .lnk:</strong> Baixa um arquivo de atalho do Windows que você pode colocar onde quiser</li>
+                        <li><strong>Script VBS:</strong> Gera um script que você pode executar para criar o atalho automaticamente</li>
+                        <li><strong>Limitações do navegador:</strong> Por segurança, o navegador não pode acessar arquivos diretamente. Cole o caminho completo ou use a seleção de arquivos</li>
+                        <li><strong>Área de transferência:</strong> Funciona apenas em navegadores modernos com HTTPS</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="developer-info">
+                <span>Desenvolvido por: Ricardo Pereira</span>
+                <a href="https://github.com/ricardopera/CriadorDeAtalhos" target="_blank" rel="noopener">🔗 Ver no GitHub</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/lnk-generator.js"></script>
+    <script src="js/vbs-generator.js"></script>
+    <script src="js/clipboard-utils.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
