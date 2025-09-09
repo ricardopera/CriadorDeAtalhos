@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔗 Criador de Atalhos - Versão Web</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔗 Criador de Atalhos</h1>
+            <p class="subtitle">Versão Web - Crie atalhos localmente através do navegador</p>
+        </header>
+
+        <main>
+            <div class="form-section">
+                <div class="input-group">
+                    <label for="source-path">Caminho do arquivo ou diretório:</label>
+                    <div class="path-input-container">
+                        <input type="text" id="source-path" placeholder="Digite ou cole o caminho completo" autocomplete="off">
+                        <button type="button" id="browse-file" class="btn btn-secondary">Selecionar Arquivo</button>
+                    </div>
+                    <div class="button-row">
+                        <button type="button" id="browse-folder" class="btn btn-secondary">Selecionar Pasta</button>
+                        <button type="button" id="detect-clipboard" class="btn btn-secondary">Detectar da Área de Transferência</button>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Destino do atalho:</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="destination" value="desktop" checked>
+                            <span class="radio-custom"></span>
+                            Área de Trabalho
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="destination" value="custom">
+                            <span class="radio-custom"></span>
+                            Local personalizado:
+                        </label>
+                    </div>
+                    <div class="custom-destination-container" style="display: none;">
+                        <div class="path-input-container">
+                            <input type="text" id="custom-destination" placeholder="Selecione a pasta de destino" disabled>
+                            <button type="button" id="browse-destination" class="btn btn-secondary" disabled>Navegar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="custom-name">Nome personalizado do atalho (opcional):</label>
+                    <input type="text" id="custom-name" placeholder="Deixe vazio para usar o nome original">
+                </div>
+
+                <div class="action-section">
+                    <button type="button" id="create-shortcut" class="btn btn-primary" disabled>
+                        <span class="btn-text">Criar Atalho</span>
+                        <span class="btn-loading" style="display: none;">Criando...</span>
+                    </button>
+                </div>
+
+                <div id="status-message" class="status-message"></div>
+            </div>
+
+            <!-- File input hidden elements for browser file selection -->
+            <input type="file" id="file-input" style="display: none;" webkitdirectory="false">
+            <input type="file" id="folder-input" style="display: none;" webkitdirectory="true">
+            <input type="file" id="destination-input" style="display: none;" webkitdirectory="true">
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="developer-info">
+                    <p>Desenvolvido por: <strong>Ricardo Pereira</strong></p>
+                    <a href="https://github.com/ricardopera/CriadorDeAtalhos" target="_blank" class="github-link">
+                        🔗 Ver no GitHub
+                    </a>
+                </div>
+                <div class="system-info">
+                    <p id="system-status">Carregando informações do sistema...</p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Modal for success message -->
+        <div id="success-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>✅ Atalho Criado com Sucesso!</h3>
+                    <button type="button" class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p id="success-message"></p>
+                    <p><strong>Local:</strong> <span id="shortcut-location"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="open-location" class="btn btn-primary">Abrir Localização</button>
+                    <button type="button" id="modal-ok" class="btn btn-secondary">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for error message -->
+        <div id="error-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>❌ Erro</h3>
+                    <button type="button" class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p id="error-message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

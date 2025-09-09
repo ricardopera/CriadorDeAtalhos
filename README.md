@@ -8,8 +8,29 @@ Uma aplicação Windows simples para criar atalhos de arquivos e diretórios.
 |--------|------------|---------|---------|-----------|
 | **C# Original** | .NET 6 WinForms | ~70-90 MB | `main` | Versão original completa |
 | **Python Reduzida** | Python + tkinter | ~10-20 MB | `python-implementation` | Versão otimizada para tamanho reduzido |
+| **🌐 Web** | Python + Flask | ~5-10 MB | `main` | **NOVO:** Interface web moderna para uso no navegador |
 
-> 💡 **Recomendação**: Use a versão Python para downloads mais rápidos e menor uso de espaço. Ambas possuem **funcionalidades idênticas**.
+> 💡 **Recomendação**: Use a versão **Web** para uma experiência moderna no navegador, ou a versão Python para downloads mais rápidos. Todas possuem **funcionalidades idênticas**.
+
+## 🌐 NOVIDADE: Versão Web
+
+**Acesse o aplicativo através do seu navegador!**
+
+```bash
+# Iniciar versão web
+start-web.bat
+# ou
+.\start-web.ps1
+```
+
+**Características da versão web:**
+- 🌐 Interface moderna e responsiva
+- 🔒 Servidor local seguro (localhost:5000)  
+- 📋 Detecção automática de área de transferência
+- ⚡ Validação em tempo real
+- 🎯 Funcionalidade completa de criação de atalhos
+
+📖 **Documentação completa**: [README-WEB.md](README-WEB.md)
 
 ## 🎯 Funcionalidades
 
@@ -104,9 +125,20 @@ Para mais detalhes, veja [RELEASE_NOTES.md](RELEASE_NOTES.md).
 
 ## 📋 Estrutura do Projeto
 
+### Versão C# Original
 - `Program.cs`: Ponto de entrada da aplicação
-- `MainForm.cs`: Interface principal e lógica da aplicação
+- `MainForm.cs`: Interface principal e lógica da aplicação  
 - `ShortcutCreator.csproj`: Arquivo de projeto
+
+### Versão Python
+- `criador_atalhos.py`: Aplicação Python com tkinter
+
+### 🌐 Versão Web (Nova)
+- `web_app.py`: Aplicação Flask principal
+- `start-web.bat` / `start-web.ps1`: Scripts de inicialização
+- `templates/index.html`: Interface web
+- `static/css/style.css`: Estilos da aplicação
+- `static/js/app.js`: JavaScript da aplicação
 
 ## 🛡️ Características Técnicas
 
